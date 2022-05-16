@@ -27,7 +27,6 @@ router.get("/index",async (req, res) => {
 
   router.get("/newsP1",async(req,res)=>{
     var result =await Da.findOne();
-    console.log(result);
     res.render("newsP1.html",{result});
     // res.send("11111")
   });

@@ -14,34 +14,32 @@ let svgCaptcha = require("svg-captcha");
 let cookoeParser = require("cookie-parser");
 const { nextTick } = require("process");
 
-router.get("/product",async (req, res) => {
-  let products = await Product.find().sort({ id:1 });
-  res.render("product.html",{products});
+router.get("/product", async (req, res) => {
+  let products = await Product.find().sort({ id: 1 });
+  res.render("product.html", { products });
 });
 
-router.get("/product/type:type",async(req,res)=>{
-  let type=req.params.type;
-  let products = await Product.find({"type":type}).sort({ id:1 });
-  res.render("product-type.html",{products,type});
-})
+router.get("/product/type:type", async (req, res) => {
+  let type = req.params.type;
+  let products = await Product.find({ type: type }).sort({ id: 1 });
+  res.render("product-type.html", { products, type });
+});
 
-router.get("/product/:id",async(req,res)=>{
-  let id=req.params.id;
-  let product=await Product.findOne({"id":id});
-  id=parseInt(id)
-  let prevId=id-1;
-  let nextId=id+1;
-  let prev=await Product.findOne({"id":prevId});
-  let next=await Product.findOne({"id":nextId});
-  // let products={product,prev,next}
-  res.render("product-child.html",{product,prev,next});
-})
+router.get("/product/:id", async (req, res) => {
+  let id = req.params.id;
+  let product = await Product.findOne({ id: id });
+  id = parseInt(id);
+  let prev = await Product.find().sort({ id: -1 }).findOne({ id: { $lt: id } });
+  let next = await Product.find().sort({ id: 1 }).findOne({ id: { $gt: id } });
+  console.log(product, prev, next);
+  res.render("product-child.html", { product, prev, next });
+});
 
-router.get("/cate/:id",async(req,res)=>{
-  let id=req.params.id;
-  let product=await Product.findOne({"id":id});
-  res.render("cate.html",{product});
-})
+router.get("/cate/:id", async (req, res) => {
+  let id = req.params.id;
+  let product = await Product.findOne({ id: id });
+  res.render("cate.html", { product });
+});
 
 router.get("/verifyCode", (req, res) => {
   // 创建验证码
@@ -50,7 +48,7 @@ router.get("/verifyCode", (req, res) => {
     //inverse:false,// 反转颜色
     width: 60, //  宽度
     height: 28, // 高度
-    fontSize: 30, // 字体大小
+    fontSize: 32, // 字体大小
     size: 4, // 验证码的长度
     noise: 0, // 干扰线条
     ignoreChars: "0oO1ilI", // 验证码字符中排除 0o1i
@@ -69,29 +67,29 @@ router.get("/connect", (req, res) => {
   res.render("connect.html");
 });
 
-router.post("/connect", async(req, res,next) => {
-  try{
+router.post("/connect", async (req, res, next) => {
+  try {
     const { name, tel, email, textarea, captcha } = req.body;
-  if (req.session.captcha == captcha) {
-    req.session.destroy();
-    var findUser = await User.findOne({ email });
-    if (findUser) {
-      User.findOneAndUpdate({ email }, { $set: { textarea } });
+    if (req.session.captcha == captcha) {
+      req.session.destroy();
+      var findUser = await User.findOne({ email });
+      if (findUser) {
+        User.findOneAndUpdate({ email }, { $set: { textarea } });
+      } else {
+        var user = new User(req.body);
+        await user.save();
+      }
+      res.json({
+        code: 2000,
+        message: "评论成功",
+      });
     } else {
-      var user = new User(req.body);
-      await user.save();
+      res.json({
+        code: 2002,
+        message: "验证码输入错误，请重新输入",
+      });
     }
-    res.json({
-      code: 2000,
-      message: "评论成功",
-    });
-  } else {
-    res.json({
-      code: 2002,
-      message: "验证码输入错误，请重新输入",
-    });
-  }
-  }catch(err){
+  } catch (err) {
     next(err);
   }
 });

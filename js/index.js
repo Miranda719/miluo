@@ -1,99 +1,118 @@
-$(function () {
-    var data = [
-        {
-            pcUrl: "../images/lun1.jpg",
-        },
-        {
-            pcUrl: "../images/lun2.jpg",
-        },
-        {
-            pcUrl: "../images/lun2.jpg",
-        },
-    ];
+const express = require("express");
+const bodyParser = require("body-parser");
+const expressSession = require("express-session");
+const path = require("path");
+const mongoose = require("mongoose");
+const User = require("../model/user");
+const Product = require("../model/products");
+const News = require("../model/news");
+const Smallimg = require("../model/smallimg");
+const Da = require("../model/dataa")
+const router = express.Router();
 
-    var $ol = $(".ML_banner .carousel-indicators");
-    var $inner = $(".ML_banner .carousel-inner");
-    function render() {
-        var str = "";
-        data.forEach((item, idx) => {
-            str += `<div class="item ${idx == 0 ? "active" : ""}"><a href="#" class="m_imgBox"><img src="${item.pcUrl}" alt=""></a></div>`;
-        });
-        $inner.html(str);
+router.get("/index",async (req, res) => {
+   let result=await News.find();
+   let result_img=await Smallimg.find();
+   console.log();
+    res.render("index.html",{result,result_img});
+  });
 
-        var str2 = "";
-        data.forEach((item, idx) => {
-            str2 += `<li data-target="#carousel-example-generic" class="${idx == 0 ? "active" : ""}" data-slide-to="${idx}"></li>`;
-        });
-        $ol.html(str2);
+  router.get("/gw-index01",async (req, res) => {
+    res.render("gw-index01.html");
+  });
+  router.get("/gw-Employees-work",async (req, res) => {
+    res.render("gw-Employees-work.html");
+  });
+  
+  router.get("/gw-zhaopin",async (req, res) => {
+    res.render("gw-zhaopin.html");
+  });
 
-    }
-    render();
-
-    $(document).ready(
-        function () {
-            $(".header").affix({
-                offset: {
-                    top: 100,
-                }
-            });
-            //每当加钉子执行的事件
-            $(".header").on("affixed.bs.affix", function () {
-                $("body").css("paddingTop", 180)
-            })
-            //每当取消钉子执行的事件
-            $(".header").on("affixed-top.bs.affix", function () {
-                $("body").css("paddingTop", 0)
-            })
-        }
-    );
-
-
-});
-var ul1 = document.getElementById("new_one");
-    var ul2 = document.getElementById("new_two");
-    var box = document.getElementById("mod6_main");
-    window.onload = roll(1500);
-    ul2.innerHTML = ul1.innerHTML;
-    function roll(t) {
-        console.log(box.scrollTop);
-        box.scrollTop = 1;
-        var timer = setInterval(rollStart, t);
-        box.onmouseover = function () {
-            clearInterval(timer)
-        }
-        box.onmouseout = function () {
-            timer = setInterval(rollStart, t);
-        }
-    }
-
-    function rollStart() {
-        if (box.scrollTop >= ul1.scrollHeight) {
-            box.scrollTop = 1;
-        } else {
-            box.scrollTop += 10;
-            box.scrollTop += 10;
-            box.scrollTop += 15;
-        }
-    }
-    $(function () {
-        $(".navbar-toggle").click(function () {
-            $(".ML_navbar_mask ").attr("style", "display:block");
-            $(".col_right").addClass("left0");
-        });
-        $(".ML_navbar_mask").click(function () {
-            $(".ML_navbar_mask ").attr("style", "display:none");
-            $(".col_right").removeClass("left0");
-        });
-        $(".glyphicon.glyphicon-menu-down").click(function () {
-            var that = $(this);
-            if(that.hasClass("glyphicon-menu-down")){
-                that.parent().parent().next().attr("style", "display:block");
-                that.removeClass("glyphicon-menu-down");
-                that.addClass("glyphicon-menu-up");
-            }else{
-                that.removeClass("glyphicon-menu-up");
-                that.addClass("glyphicon-menu-down");
-                that.parent().parent().next().attr("style", "display:none");
-            }
-        })
+  router.get("/newsP1",async(req,res)=>{
+    var result =await Da.findOne();
+    console.log(result);
+    res.render("newsP1.html",{result});
+    // res.send("11111")
+  });
+  router.get("/newsP2",async(req,res)=>{
+    res.render("newsP2.html");
+  });
+  router.get("/newsP3",async(req,res)=>{
+    res.render("newsP3.html");
+  });
+  router.get("/news-01",async(req,res)=>{
+    res.render("news-01.html");
+  });
+  router.get("/news-02",async(req,res)=>{
+    res.render("news-02.html");
+  });
+  router.get("/news-03",async(req,res)=>{
+    res.render("news-03.html");
+  });
+  router.get("/news-04",async(req,res)=>{
+    res.render("news-04.html");
+  });
+  router.get("/news-05",async(req,res)=>{
+    res.render("news-05.html");
+  });
+  router.get("/news-06",async(req,res)=>{
+    res.render("news-06.html");
+  });
+  router.get("/news-07",async(req,res)=>{
+    res.render("news-07.html");
+  });
+  router.get("/news-08",async(req,res)=>{
+    res.render("news-08.html");
+  });
+  router.get("/news-09",async(req,res)=>{
+    res.render("news-09.html");
+  });
+  router.get("/news-10",async(req,res)=>{
+    res.render("news-10.html");
+  });
+  router.get("/news-11",async(req,res)=>{
+    res.render("news-11.html");
+  });
+  router.get("/news-12",async(req,res)=>{
+    res.render("news-12.html");
+  });
+  router.get("/news-13",async(req,res)=>{
+    res.render("news-13.html");
+  });
+  router.get("/news-14",async(req,res)=>{
+    res.render("news-14.html");
+  });
+  router.get("/news-15",async(req,res)=>{
+    res.render("news-15.html");
+  });
+  router.get("/news-16",async(req,res)=>{
+    res.render("news-16.html");
+  });
+  router.get("/news-17",async(req,res)=>{
+    res.render("news-17.html");
+  });
+  router.get("/news-18",async(req,res)=>{
+    res.render("news-18.html");
+  });
+  router.get("/news-19",async(req,res)=>{
+    res.render("news-19.html");
+  });
+  router.get("/news-20",async(req,res)=>{
+    res.render("news-20.html");
+  });
+  router.get("/news-21",async(req,res)=>{
+    res.render("news-21.html");
+  });
+  router.get("/news-22",async(req,res)=>{
+    res.render("news-22.html");
+  });
+  router.get("/dongtaiP1",async (req, res) => {
+  res.render("dongtaiP1.html");
+  });
+  router.get("/dongtaiP2",async (req, res) => {
+    res.render("dongtaiP2.html");
     });
+  router.get("/zixunP1",async (req, res) => {
+  res.render("zixunP1.html");
+  });
+module.exports = router;

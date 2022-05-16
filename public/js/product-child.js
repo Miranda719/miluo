@@ -28,7 +28,8 @@ $(function () {
     // 当出现模态框之后，点击不是模态框外面区域也可关闭模态框
     $(document).click(function () {
         if ($('.modal-backdrop.in')) {
-            $('.modal-backdrop.in').click(function () {
+            $('.modal-backdrop.in').click(function (e) {
+                $('.modal-backdrop.in').remove();
                 $('.closeModal').click();
             })
         }
